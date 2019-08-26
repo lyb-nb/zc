@@ -23,7 +23,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">OK</button>
+                <button id="confirmModalBtn" type="button" class="btn btn-primary">OK</button>
             </div>
         </div>
     </div>

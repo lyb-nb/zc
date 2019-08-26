@@ -33,7 +33,7 @@
             // 在全局作用域内创建roleIdArray
             window.roleIdArray = new Array();
             // 遍历$(".roleItembox:checked")
-            $(".roleItembox:checked").each(function(){
+            $(".roleItembox:checked").each(function () {
                 // 通过checkbox的roleid属性获取roleId值
                 var roleId = $(this).attr("roleid");
                 // 存入数组
@@ -42,6 +42,125 @@
             // 调用函数打开模态框
             showRemoveConfirmModal();
         });
+        $("#confirmModalBtn").click(function () {
+            var requestBody = JSON.stringify(window.roleIdArray);
+            $.ajax({
+                "url": "role/batch/remove",
+                "type": "post",
+                "data": requestBody,
+                "contentType": "application/json;charset=utf-8",
+                "dataType": "json",
+                "success": function (response) {
+                    var result = response.result;
+                    if ("SUCCESS" == result) {
+                        layer.msg("操作成功");
+                        //删除成功，重新执行分页
+                        showPage();
+                    }
+                    if ("FAILID" == result) {
+                        layer.msg(response.data);
+                    }
+                    //不论成功还是失败 模态框最终都需关闭
+                    $("#confirmModal").modal("hide");
+                },
+                "error": function (response) {
+                    layer.msg(response.message);
+                }
+            });
+        });
+        // 针对.removeBtn这样动态生成的元素对象使用on()函数方式绑定单击响应函数
+        // $("动态元素所依附的静态元素").on("事件类型","具体要绑定事件的动态元素的选择器", 事件响应函数);
+        $("#roleTableBody").on("click", ".removeBtn", function () {
+            //获取当前记录的roleId
+            var roleId = $(this).attr("roleid");
+            //存入到全局变量数组
+            window.roleIdArray = new Array();
+            window.roleIdArray.push(roleId);
+            //打开模态框(后续所有操作都和批量删除一样)
+            showRemoveConfirmModal();
+        });
+        $("#roleAddBtn").click(function () {
+            $("#addModal").modal("show");
+        });
+
+        $("#addModalBtn").click(function () {
+            var roleName = $.trim($("#roleNameInput").val());
+            if (roleName == null || roleName == "") {
+                layer.msg("请输入有效角色名称！");
+                return;
+            }
+            $.ajax({
+                "url": "role/save/role",
+                "type": "post",
+                "data": {
+                    "roleName": roleName
+                },
+                "dataType": "json",
+                "success": function (response) {
+                    var result = response.result;
+                    if ("SUCCESS" == result) {
+                        layer.msg("操作成功");
+                        // 3.操作成功重新分页
+                        // 前往最后一页
+                        window.pageNum = 999999;
+                        showPage();
+                    }
+                    if (result == "FAILED") {
+                        layer.msg(response.message);
+                    }
+                    // 4.不管成功还是失败，关闭模态框
+                    $("#addModal").modal("hide");
+                    // 5.清理本次在文本框填写的数据
+                    $("#roleNameInput").val("");
+                },
+                "error": function (response) {
+                    layer.msg(response.message);
+                }
+            });
+        });
+
+        $("#roleTableBody").on("click", ".editBtn", function () {
+            // 1.获取当前按钮的roleId
+            window.roleId = $(this).attr("roleId");
+            // 2.获取当前按钮所在行的roleName
+            var roleName = $(this).parents("tr").children("td:eq(2)").text();
+            // 3.修改模态框中文本框的value值，目的是在显示roleName
+            $("#roleNameInputEdit").val(roleName);
+            // 4.打开模态框
+            $("#editModal").modal("show");
+        });
+        $("#editModalBtn").click(function () {
+            // 1.获取文本框值
+            var roleName = $.trim($("#roleNameInputEdit").val());
+            if (roleName == null || roleName == "") {
+                layer.msg("请输入有效角色名称！");
+                return;
+            }
+            // 2.发送请求
+            $.ajax({
+                "url": "role/update/role",
+                "type": "post",
+                "data": {
+                    "id": window.roleId,
+                    "name": roleName
+                },
+                "dataType": "json",
+                "success": function (response) {
+                    var result = response.result;
+                    if (result == "SUCCESS") {
+                        layer.msg("操作成功！");
+                        // 3.操作成功重新分页
+                        showPage();
+                    }
+                    if (result == "FAILED") {
+                        layer.msg(response.message);
+                    }
+                    // 4.不管成功还是失败，关闭模态框
+                    $("#editModal").modal("hide");
+                }
+            });
+        });
+
     })
 </script>
 <body>
@@ -71,8 +190,8 @@
                             style="float:right;margin-left:10px;"><i
                             class=" glyphicon glyphicon-remove"></i> 批量删除
                     </button>
-                    <button type="button" class="btn btn-primary" style="float:right;"
-                            onclick="window.location.href='form.html'"><i class="glyphicon glyphicon-plus"></i> 新增
+                    <button id="roleAddBtn" type="button" class="btn btn-primary" style="float:right;"
+                    ><i class="glyphicon glyphicon-plus"></i> 新增
                     </button>
                     <br>
                     <hr style="clear:both;">
@@ -173,5 +292,7 @@
 </div>
 </div>
 <%@ include file="/WEB-INF/pages/include-modal-role-confirm.jsp" %>
+<%@ include file="/WEB-INF/pages/include-modal-role-add.jsp" %>
+<%@ include file="/WEB-INF/pages/include-modal-role-edit.jsp" %>
 </body>
 </html>

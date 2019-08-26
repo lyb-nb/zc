@@ -37,4 +37,21 @@ public class RoleServiceImpl implements RoleService {
         // 执行查询
         return roleMapper.selectByExample(roleExample);
     }
+
+    @Override
+    public void batchRemove(List<Integer> roleIdList) {
+        RoleExample roleExample = new RoleExample();
+        roleExample.createCriteria().andIdIn(roleIdList);
+        roleMapper.deleteByExample(roleExample);
+    }
+
+    @Override
+    public void saveRole(String roleName) {
+        roleMapper.insert(new Role(null, roleName));
+    }
+
+    @Override
+    public void updateRole(Role role) {
+        roleMapper.updateByPrimaryKey(role);
+    }
 }

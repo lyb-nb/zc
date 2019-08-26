@@ -2,6 +2,10 @@
 function showPage() {
     //给服务器发送请求获取分页数据(pageInfo)
     var pageInfo = getPageInfo();
+    if (pageInfo == null) {
+        // 如果没有获取到pageInfo数据，则停止后续操作
+        return;
+    }
     //在页面表格的tbody标签中显示分页主题数据
     generateTableBody(pageInfo);
     //在页面表格的tfoot标签中显示导航条数据
@@ -61,8 +65,8 @@ function generateTableBody(pageInfo) {
     for (var i = 0; i < list.length; i++) {
         var role = list[i];
         var checkBtn = "<button type='button' class='btn btn-success btn-xs'><i class=' glyphicon glyphicon-check'></i></button>";
-        var pencilBtn = "<button type='button' class='btn btn-primary btn-xs'><i class=' glyphicon glyphicon-pencil'></i></button>";
-        var removeBtn = "<button type='button' class='btn btn-danger btn-xs'><i class=' glyphicon glyphicon-remove'></i></button>";
+        var pencilBtn = "<button roleId='" + role.id + "' type='button' class='btn btn-primary btn-xs editBtn''><i class=' glyphicon glyphicon-pencil'></i></button>";
+        var removeBtn = "<button roleId='" + role.id + "' type='button' class='btn btn-danger btn-xs removeBtn'><i class=' glyphicon glyphicon-remove'></i></button>";
 
         var numberTd = "<td>" + (i + 1) + "</td>";
         var checkBoxTd = "<td><input roleid='" + role.id + "' class='roleItembox' type='checkbox'></td>";

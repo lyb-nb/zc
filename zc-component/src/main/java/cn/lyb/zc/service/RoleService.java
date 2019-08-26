@@ -13,4 +13,10 @@ public interface RoleService {
     PageInfo<Role> selectByKeyword(Integer pageNum, Integer pageSize, String keyword);
 
     List<Role> getRoleListByIdList(List<Integer> roleIdList);
+
+    void batchRemove(List<Integer> roleIdList);
+
+    void saveRole(String roleName);
+
+    void updateRole(Role role);
 }
