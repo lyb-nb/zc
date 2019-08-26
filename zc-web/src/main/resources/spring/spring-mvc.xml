@@ -33,8 +33,10 @@
 
             <!-- 设置要拦截的路径中的例外，也就是不拦截的路径 -->
             <mvc:exclude-mapping path="/to/admin/login"/>
+            <mvc:exclude-mapping path="/to/admin/add"/>
             <mvc:exclude-mapping path="/admin/login"/>
             <mvc:exclude-mapping path="/admin/logout"/>
+            <mvc:exclude-mapping path="/to/role/page"/>
             <mvc:exclude-mapping path="/bootstrap/**"/>
             <mvc:exclude-mapping path="/css/**"/>
             <mvc:exclude-mapping path="/fonts/**"/>
@@ -42,9 +44,11 @@
             <mvc:exclude-mapping path="/jquery/**"/>
             <mvc:exclude-mapping path="/script/**"/>
             <mvc:exclude-mapping path="/ztree/**"/>
+            <mvc:exclude-mapping path="/WEB-INF/pages/**"/>
             <!-- 拦截器的bean -->
             <bean class="cn.lyb.zc.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <mvc:view-controller path="to/role/page" view-name="role-page"/>
 </beans>

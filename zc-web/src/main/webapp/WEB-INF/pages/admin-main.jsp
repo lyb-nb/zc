@@ -3,9 +3,7 @@
 <!DOCTYPE html>
 <html lang="UTF-8">
 <%@ include file="/WEB-INF/pages/include-head.jsp" %>
-
 <body>
-
 <%@include file="/WEB-INF/pages/include-nav.jsp"%>
 <div class="container-fluid">
     <div class="row">

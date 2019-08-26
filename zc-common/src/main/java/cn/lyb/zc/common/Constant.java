@@ -12,5 +12,6 @@ public class Constant {
     public static final String MESSAGE_LOGIN_FAILED = "登录账号或密码不正确！请核对后再登录！";
     public static final String MESSAGE_CODE_INVALID = "明文不是有效字符串，请核对后再操作！";
 
-    public static final Object MESSAGE_ACCESS_DENIED = "拒绝访问,请登录后再次尝试";
+    public static final String MESSAGE_ACCESS_DENIED = "拒绝访问,请登录后再次尝试";
+    public static final String DUPLICATE_LOGINACCT = "账户已经存在,请重新设置";
 }

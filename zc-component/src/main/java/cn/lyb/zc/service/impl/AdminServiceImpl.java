@@ -31,11 +31,6 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.selectByExample(new AdminExample());
     }
 
-    @Override
-    public void updateAdmin() {
-        adminMapper.updateByPrimaryKey(
-                new Admin(2, "cube222", "654321@@@", "酷吧222", "cube@qq.com222", null));
-    }
 
     @Override
     public Admin login(String loginAcct, String userPswd) {
@@ -68,4 +63,31 @@ public class AdminServiceImpl implements AdminService {
         criteria.andIdIn(adminIdList);
         adminMapper.deleteByExample(example);
     }
+
+    @Override
+    public void saveAdmin(Admin admin) {
+        // 对密码进行加密
+        String userPswd = admin.getUserPswd();
+        userPswd = Md5Util.md5(userPswd);
+        admin.setUserPswd(userPswd);
+
+        adminMapper.insert(admin);
+    }
+
+    @Override
+    public Admin getAdminById(Integer adminId) {
+        return adminMapper.selectByPrimaryKey(adminId);
+    }
+
+    @Override
+    public void updateAdmin(Admin admin) {
+        // 对密码进行加密
+        String userPswd = admin.getUserPswd();
+        userPswd = Md5Util.md5(userPswd);
+        admin.setUserPswd(userPswd);
+
+        adminMapper.updateByPrimaryKey(admin);
+    }
+
+
 }

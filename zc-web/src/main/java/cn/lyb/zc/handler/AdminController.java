@@ -6,6 +6,7 @@ import cn.lyb.zc.entity.ResultEntity;
 import cn.lyb.zc.service.AdminService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,18 @@ public class AdminController {
     @GetMapping("/to/admin/login")
     public String toAdminLogin() {
         return "admin-login";
+    }
+
+    @GetMapping("/to/admin/add")
+    public String toAdminAdd() {
+        return "admin-add";
+    }
+
+    @GetMapping("/to/admin/update")
+    public String toAdminUpdate(@RequestParam("adminId") Integer adminId, Model model) {
+        Admin admin = adminService.getAdminById(adminId);
+        model.addAttribute("admin", admin);
+        return "admin-update";
     }
 
     @PostMapping(value = "admin/login")
@@ -81,5 +94,29 @@ public class AdminController {
         } catch (Exception ex) {
             return ResultEntity.fail("批量删除失败", ex.getMessage());
         }
+    }
+
+    @PostMapping("admin/save")
+    public String adminAdd(Admin admin) {
+        try {
+            adminService.saveAdmin(admin);
+        } catch (Exception e) {
+            if (e instanceof DuplicateKeyException) {
+                throw new RuntimeException(Constant.DUPLICATE_LOGINACCT);
+            }
+        }
+        return "redirect:/admin/page/query";
+    }
+
+    @PostMapping("admin/update")
+    public String adminUpdate(Admin admin, @RequestParam("pageNum") String pageNum) {
+        try {
+            adminService.updateAdmin(admin);
+        } catch (Exception e) {
+            if (e instanceof DuplicateKeyException) {
+                throw new RuntimeException(Constant.DUPLICATE_LOGINACCT);
+            }
+        }
+        return "redirect:/admin/page/query?pageNum=" + pageNum;
     }
 }

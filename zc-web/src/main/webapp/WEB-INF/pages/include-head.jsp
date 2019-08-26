@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../css/font-awesome.min.css">
     <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../layui/theme/default/layer.css">
     <style>
         .tree li {
             list-style-type: none;

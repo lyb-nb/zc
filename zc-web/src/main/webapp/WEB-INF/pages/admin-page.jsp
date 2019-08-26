@@ -7,8 +7,13 @@
 <link rel="stylesheet" href="../../css/pagination.css">
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/jquery.pagination.js"></script>
+<script type="text/javascript" src="../../script/my-admin.js"></script>
 <script type="text/javascript">
     $(function () {
+        window.totalRecord =${requestScope['PAGE-INFO'].total};
+        window.pageNum =${requestScope['PAGE-INFO'].pageNum};
+        window.pageSize =${requestScope['PAGE-INFO'].pageSize};
+        window.keyword = "${param.keyword}";
         // 对分页导航条显示进行初始化
         initPagination();
 
@@ -31,33 +36,11 @@
                 // 函数停止执行
                 return;
             }
-            var requestBody = JSON.stringify(adminArray);
             var confirmResult = confirm("您真的要删除" + loginAcct + "这条记录吗？");
             if (!confirmResult) {
                 return;
             }
-            $.ajax({
-                "url": "admin/batch/delete",
-                "type": "post",
-                "contentType": "application/json;charset=UTF-8",
-                "data": requestBody,
-                "dataType": "json",
-                "success": function (response) {
-                    console.log(response);
-                    var result = response.result;
-                    if ("SUCCESS" == result) {
-                        window.location.href = "admin/page/query?pageNum=" + ${requestScope['PAGE-INFO'].pageNum} +"&keyword=${param.keyword}";
-                    }
-                    if ("FAILID" == result) {
-                        alert(response.message + response.data);
-                        return;
-                    }
-                },
-                "error": function (response) {
-                    alert(response.message + response.data);
-                    return;
-                }
-            })
+            batchDelete(adminArray);
         });
         $("#batchRemoveBtn").click(function () {
             var adminArray = new Array();
@@ -68,7 +51,6 @@
                 var loginAcct = $(this).parent("td").next().text();
                 loginAcctArray.push(loginAcct);
             });
-            var requestBody = JSON.stringify(adminArray);
             // 检查adminIdArray是否包含有效数据
             if (adminArray.length == 0) {
                 // 给出提示
@@ -82,58 +64,9 @@
             if (!confirmResult) {
                 return;
             }
-            $.ajax({
-                "url": "admin/batch/delete",
-                "type": "post",
-                "contentType": "application/json;charset=UTF-8",
-                "data": requestBody,
-                "dataType": "json",
-                "success": function (response) {
-                    console.log(response);
-                    var result = response.result;
-                    if ("SUCCESS" == result) {
-                        window.location.href = "admin/page/query?pageNum=" + ${requestScope['PAGE-INFO'].pageNum} +"&keyword=${param.keyword}";
-                    }
-                    if ("FAILID" == result) {
-                        alert(response.message + response.data);
-                        return;
-                    }
-                },
-                "error": function (response) {
-                    alert(response.message + response.data);
-                    return;
-                }
-            })
+            batchDelete(adminArray);
         });
     });
-
-    // 声明函数封装导航条初始化操作
-    function initPagination() {
-        // 声明变量存储总记录数
-        var totalRecord = ${requestScope['PAGE-INFO'].total};
-        // 声明变量存储分页导航条显示时的属性设置
-        var paginationProperties = {
-            num_edge_entries: 3,			//边缘页数
-            num_display_entries: 4,		//主体页数
-            callback: pageselectCallback,	//回调函数
-            items_per_page: ${requestScope['PAGE-INFO'].pageSize},	//每页显示数据数量，就是pageSize
-            current_page: ${requestScope['PAGE-INFO'].pageNum - 1},//当前页页码
-            prev_text: "上一页",			//上一页文本
-            next_text: "下一页"			//下一页文本
-        };
-
-        // 显示分页导航条
-        $("#Pagination").pagination(totalRecord, paginationProperties);
-    }
-
-    // 在每一次点击“上一页”、“下一页”、“页码”时执行这个函数跳转页面
-    function pageselectCallback(pageIndex) {
-        // pageIndex从0开始，pageNum从1开始
-        var pageNum = pageIndex + 1;
-        // 跳转页面
-        window.location.href = "admin/page/query?pageNum=" + pageNum + "&keyword=${param.keyword}";
-        return false;
-    }
 </script>
 <body>
 <%@ include file="/WEB-INF/pages/include-nav.jsp" %>
@@ -162,9 +95,9 @@
                             style="float:right;margin-left:10px;"><i
                             class=" glyphicon glyphicon-remove"></i> 删除
                     </button>
-                    <button type="button" class="btn btn-primary" style="float:right;"
-                            onclick="window.location.href='add.html'"><i class="glyphicon glyphicon-plus"></i> 新增
-                    </button>
+                    <a class="btn btn-primary" style="float:right;"
+                       href="to/admin/add"><i class="glyphicon glyphicon-plus"></i> 新增
+                    </a>
                     <br>
                     <hr style="clear:both;">
                     <div class="table-responsive">
@@ -198,8 +131,9 @@
                                         <td>
                                             <button type="button" class="btn btn-success btn-xs"><i
                                                     class=" glyphicon glyphicon-check"></i></button>
-                                            <button type="button" class="btn btn-primary btn-xs"><i
-                                                    class=" glyphicon glyphicon-pencil"></i></button>
+                                            <a href="to/admin/update?adminId=${admin.id}&pageNum=${requestScope['PAGE-INFO'].pageNum}"
+                                               class="btn btn-primary btn-xs"><i
+                                                    class=" glyphicon glyphicon-pencil"></i></a>
                                             <button type="button" adminId="${admin.id }"
                                                     class="btn btn-danger btn-xs singleDelete"><i
                                                     class="glyphicon glyphicon-remove"></i></button>

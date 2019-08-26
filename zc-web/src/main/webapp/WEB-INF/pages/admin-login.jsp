@@ -39,6 +39,7 @@
 				<input 
 					type="text"
 					name="loginAcct"
+					value="marry"
 					class="form-control" 
 					id="inputSuccess3"
 					placeholder="请输入登录账号" 
@@ -49,6 +50,7 @@
 				<input 
 					type="text" 
 					name="userPswd"
+					value="123456"
 					class="form-control" 
 					id="inputSuccess4"
 					placeholder="请输入登录密码" 
