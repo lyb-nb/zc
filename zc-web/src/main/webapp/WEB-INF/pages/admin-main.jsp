@@ -2,7 +2,9 @@
          pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="UTF-8">
-<%@ include file="/WEB-INF/pages/include-head.jsp" %>
+<head>
+    <%@ include file="/WEB-INF/pages/include-head.jsp" %>
+</head>
 <body>
 <%@include file="/WEB-INF/pages/include-nav.jsp"%>
 <div class="container-fluid">

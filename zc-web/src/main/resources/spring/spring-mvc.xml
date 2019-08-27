@@ -51,4 +51,5 @@
     </mvc:interceptors>
 
     <mvc:view-controller path="to/role/page" view-name="role-page"/>
+    <mvc:view-controller path="to/menu/page" view-name="menu-page"/>
 </beans>

@@ -3,71 +3,73 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="UTF-8">
-<%@ include file="/WEB-INF/pages/include-head.jsp" %>
-<link rel="stylesheet" href="../../css/pagination.css">
-<script type="text/javascript" src="../../script/jquery.min.js"></script>
-<script type="text/javascript" src="../../script/jquery.pagination.js"></script>
-<script type="text/javascript" src="../../script/my-admin.js"></script>
-<script type="text/javascript">
-    $(function () {
-        window.totalRecord =${requestScope['PAGE-INFO'].total};
-        window.pageNum =${requestScope['PAGE-INFO'].pageNum};
-        window.pageSize =${requestScope['PAGE-INFO'].pageSize};
-        window.keyword = "${param.keyword}";
-        // 对分页导航条显示进行初始化
-        initPagination();
+<head>
+    <%@ include file="/WEB-INF/pages/include-head.jsp" %>
+    <link rel="stylesheet" href="../../css/pagination.css">
+    <script type="text/javascript" src="../../script/jquery.min.js"></script>
+    <script type="text/javascript" src="../../script/jquery.pagination.js"></script>
+    <script type="text/javascript" src="../../script/my-admin.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            window.totalRecord =${requestScope['PAGE-INFO'].total};
+            window.pageNum =${requestScope['PAGE-INFO'].pageNum};
+            window.pageSize =${requestScope['PAGE-INFO'].pageSize};
+            window.keyword = "${param.keyword}";
+            // 对分页导航条显示进行初始化
+            initPagination();
 
-        $("#summarybox").click(function () {
-            $(".itembox").attr("checked", this.checked);
-        });
-        // 给单条删除按钮绑定单击响应函数
-        $(".singleDelete").click(function () {
-            // 获取当前adminId值
-            var adminId = $(this).attr("adminId");
-            // 获取当前记录的loginAcct
-            var loginAcct = $(this).parents("tr").children("td:eq(2)").text();
-            // 为了能够使用批量删除的操作，将adminId存入数组
-            var adminArray = new Array();
-            adminArray.push(adminId);
-            // 检查adminIdArray是否包含有效数据
-            if (adminArray.length == 0) {
-                // 给出提示
-                alert("请勾选您要删除的记录！");
-                // 函数停止执行
-                return;
-            }
-            var confirmResult = confirm("您真的要删除" + loginAcct + "这条记录吗？");
-            if (!confirmResult) {
-                return;
-            }
-            batchDelete(adminArray);
-        });
-        $("#batchRemoveBtn").click(function () {
-            var adminArray = new Array();
-            var loginAcctArray = new Array();
-            $(".itembox:checked").each(function () {
-                var adminId = $(this).attr("adminId");
-                adminArray.push(adminId);
-                var loginAcct = $(this).parent("td").next().text();
-                loginAcctArray.push(loginAcct);
+            $("#summarybox").click(function () {
+                $(".itembox").attr("checked", this.checked);
             });
-            // 检查adminIdArray是否包含有效数据
-            if (adminArray.length == 0) {
-                // 给出提示
-                alert("请勾选您要删除的记录！");
-                // 函数停止执行
-                return;
-            }
-            // 给出确认提示，让用户确认是否真的删除这两条记录
-            var confirmResult = confirm("您真的要删除" + loginAcctArray + "信息吗？操作不可逆，请谨慎决定！");
-            // 如果用户点击了取消，那么让函数停止执行
-            if (!confirmResult) {
-                return;
-            }
-            batchDelete(adminArray);
+            // 给单条删除按钮绑定单击响应函数
+            $(".singleDelete").click(function () {
+                // 获取当前adminId值
+                var adminId = $(this).attr("adminId");
+                // 获取当前记录的loginAcct
+                var loginAcct = $(this).parents("tr").children("td:eq(2)").text();
+                // 为了能够使用批量删除的操作，将adminId存入数组
+                var adminArray = new Array();
+                adminArray.push(adminId);
+                // 检查adminIdArray是否包含有效数据
+                if (adminArray.length == 0) {
+                    // 给出提示
+                    alert("请勾选您要删除的记录！");
+                    // 函数停止执行
+                    return;
+                }
+                var confirmResult = confirm("您真的要删除" + loginAcct + "这条记录吗？");
+                if (!confirmResult) {
+                    return;
+                }
+                batchDelete(adminArray);
+            });
+            $("#batchRemoveBtn").click(function () {
+                var adminArray = new Array();
+                var loginAcctArray = new Array();
+                $(".itembox:checked").each(function () {
+                    var adminId = $(this).attr("adminId");
+                    adminArray.push(adminId);
+                    var loginAcct = $(this).parent("td").next().text();
+                    loginAcctArray.push(loginAcct);
+                });
+                // 检查adminIdArray是否包含有效数据
+                if (adminArray.length == 0) {
+                    // 给出提示
+                    alert("请勾选您要删除的记录！");
+                    // 函数停止执行
+                    return;
+                }
+                // 给出确认提示，让用户确认是否真的删除这两条记录
+                var confirmResult = confirm("您真的要删除" + loginAcctArray + "信息吗？操作不可逆，请谨慎决定！");
+                // 如果用户点击了取消，那么让函数停止执行
+                if (!confirmResult) {
+                    return;
+                }
+                batchDelete(adminArray);
+            });
         });
-    });
-</script>
+    </script>
+</head>
 <body>
 <%@ include file="/WEB-INF/pages/include-nav.jsp" %>
 <div class="container-fluid">

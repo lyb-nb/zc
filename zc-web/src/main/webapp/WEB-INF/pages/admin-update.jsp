@@ -3,7 +3,9 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!DOCTYPE html>
 <html lang="UTF-8">
-<%@ include file="/WEB-INF/pages/include-head.jsp" %>
+<head>
+    <%@ include file="/WEB-INF/pages/include-head.jsp" %>
+</head>
 <body>
 
 <%@ include file="/WEB-INF/pages/include-nav.jsp" %>
